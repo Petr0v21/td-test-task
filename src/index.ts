@@ -2,8 +2,13 @@ import express, { Express, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import apiController from './controllers';
+import dbConnect from './db';
 
 dotenv.config();
+
+//TODO alias src
+
+dbConnect();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
