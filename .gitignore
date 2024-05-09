@@ -1,0 +1,8 @@
+/.eslintignore
+/.prettierignore
+/.env
+/node_modules
+/.vscode
+/build
+/.idea
+/tsconfig.tsbuildinfo

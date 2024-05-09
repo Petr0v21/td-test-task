@@ -1,0 +1,43 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    // "quotes": ["error", "double "], // Use double quotes.
+    "semi": [
+      "error",
+      "always"
+    ],
+    // Always add a semicolon at the end of the statement.
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    // Indentation is two spaces.
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
+    // "no-console": 1, // Avoid using `console` methods in your code.
+    "prettier/prettier": 2
+    // Means error
+  }
+}
