@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-import { TokenPayloadType } from '@src/types';
+import { TokenPayloadType } from '../../types';
 import { userFindById } from '../../services/User';
 dotenv.config();
 

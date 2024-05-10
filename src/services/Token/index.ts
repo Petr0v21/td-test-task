@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { TokenPayloadType } from '@src/types';
+import { TokenPayloadType } from '../../types';
 dotenv.config();
 
 export const generateToken = async (_id: string) => {
