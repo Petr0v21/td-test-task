@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import csvParser from 'csv-parser';
 import fs from 'fs';
-import authMiddleware from './middeware/auth.middleware';
+import authMiddleware from '../middewares/auth.middleware';
 import { checkUser } from '../services/User';
 import { generateToken } from '../services/Token';
 import { clearUp, findAll, insertMany } from '../services/CSV';
@@ -65,18 +65,22 @@ router.post(
         .on('data', (chunk) => {
           if (!separator) {
             const text = chunk.toString();
-            if (text.includes(',')) {
-              separator = ',';
-            } else if (text.includes(';')) {
-              separator = ';';
-            } else if (text.includes('\t')) {
-              separator = '\t';
+            switch (true) {
+              case text.includes(';'):
+                separator = ';';
+                break;
+              case text.includes('\t'):
+                separator = '\t';
+                break;
+              case text.includes(','):
+              default:
+                separator = ',';
+                break;
             }
           }
         })
         .on('end', () => {
-          separator = separator || ',';
-          const csvData: any[] = [];
+          const csvData: Record<string, string>[] = [];
           fs.createReadStream(req.file.path)
             .pipe(
               csvParser({ separator, mapValues: ({ value }) => value.trim() })
