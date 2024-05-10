@@ -60,51 +60,21 @@ router.post(
       if (!result) {
         throw new Error('Error on clean up DB');
       }
-      let separator: string | null = null;
+      const csvData: Record<string, string>[] = [];
       fs.createReadStream(req.file.path)
-        .on('data', (chunk) => {
-          if (!separator) {
-            const text = chunk.toString();
-            switch (true) {
-              case text.includes(';'):
-                separator = ';';
-                break;
-              case text.includes('\t'):
-                separator = '\t';
-                break;
-              case text.includes(','):
-              default:
-                separator = ',';
-                break;
-            }
-          }
+        .pipe(csvParser())
+        .on('data', (row) => {
+          csvData.push(row);
         })
-        .on('end', () => {
-          const csvData: Record<string, string>[] = [];
-          fs.createReadStream(req.file.path)
-            .pipe(
-              csvParser({ separator, mapValues: ({ value }) => value.trim() })
-            )
-            .on('data', (row) => {
-              Object.keys(row).forEach((key) => {
-                const newKey = key.trim();
-                if (newKey !== key) {
-                  row[newKey] = row[key];
-                  delete row[key];
-                }
-              });
-              csvData.push(row);
-            })
-            .on('end', async () => {
-              const result = await insertMany(csvData);
-              if (result) {
-                return res.status(200).json({
-                  success: true,
-                  message: 'CSV data uploaded and saved to MongoDB'
-                });
-              }
-              throw new Error('Something went wrong!');
+        .on('end', async () => {
+          const result = await insertMany(csvData);
+          if (result) {
+            return res.status(200).json({
+              success: true,
+              message: 'CSV data uploaded and saved to MongoDB'
             });
+          }
+          throw new Error('Something went wrong!');
         });
     } catch (err) {
       res.status(500).json({
