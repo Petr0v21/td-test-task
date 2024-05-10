@@ -3,6 +3,7 @@
 /.env
 /node_modules
 /.vscode
-/build
+/dist
+/uploads
 /.idea
 /tsconfig.tsbuildinfo

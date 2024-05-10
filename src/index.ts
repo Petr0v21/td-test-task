@@ -1,9 +1,13 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import apiController from './controllers';
+import dbConnect from './db';
+import { LogType } from './utils/LogType';
 
 dotenv.config();
+
+dbConnect();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -23,10 +27,8 @@ app.use(express.json());
 app.use(limiter);
 app.use('/api', apiController);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('TD TEST TASK');
-});
-
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(
+    `[${LogType.Server}]: Server is running at http://localhost:${port}`
+  );
 });
